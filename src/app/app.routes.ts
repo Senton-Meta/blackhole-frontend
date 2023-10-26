@@ -7,11 +7,12 @@ export const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
 
   {path: 'home', component: HomePageComponent},
+  {path: 'sign-in', title: 'Авторизация', component: SignInPageComponent},
 
   {
     path: 'dev',
     children: [
-      {path: 'sign-in', title: 'Авторизация', component: SignInPageComponent}
+
     ]
   },
 
