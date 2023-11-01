@@ -5,11 +5,19 @@ import {User} from "../../../entities/user";
 import {Router} from "@angular/router";
 import {StorageService} from "../../_services/storage.service";
 import {Role} from "../../../entities/role";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
-export interface AuthResponseData {
+
+interface AuthResponseData {
+  accessToken: string;
+  refreshToken: string;
+  // Другие свойства, если они есть
+}
+
+export interface UserResponseData {
   id: number,
   email: string,
-  roles: string[],
+  roles: Role[],
 }
 
 @Injectable({
@@ -20,9 +28,10 @@ export class AuthService {
   AuthenticatedUser$ = new BehaviorSubject<User | null>(null);
 
   constructor(
-    private http: HttpClient,
-    private storageService: StorageService,
-    private router: Router
+    private readonly http: HttpClient,
+    private readonly storageService: StorageService,
+    private readonly router: Router,
+    private readonly jwtHelper: JwtHelperService
   ) {
   }
 
@@ -30,6 +39,9 @@ export class AuthService {
     return this.http.request<AuthResponseData>('post', this.url + 'authentication/sign-in',
       {
         body: {email, password},
+        headers: {
+          'Content-Type': 'application/json',
+        },
         withCredentials: true
       })
       .pipe(
@@ -41,23 +53,20 @@ export class AuthService {
           }
           return throwError(() => new Error(errorMessage))
         }),
-        tap(
-          user => {
-            const extractedUser: User = {
-              email: user.email,
-              id: user.id,
-              roles: user.roles.map(role => {
-                return {
-                  id: parseInt(role[0]),
-                  name: role[1],
-                  level: parseInt(role[2]),
-                } as Role
-              })
-            }
+        tap((user) => {
+          const token = user.accessToken;
+          if (token) {
+            const decodedToken = this.jwtHelper.decodeToken(token);
+            console.log(decodedToken);
+            const extractedUser: UserResponseData = {
+              email: decodedToken.email,
+              id: decodedToken.sub,
+              roles: decodedToken.roles
+            };
             this.storageService.saveUser(extractedUser);
             this.AuthenticatedUser$.next(extractedUser);
           }
-        )
+        })
       );
   }
 

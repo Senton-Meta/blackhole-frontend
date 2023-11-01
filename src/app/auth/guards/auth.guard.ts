@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     map(user => {
       // check if route is restricted by role
       const { roles } = route.data;
-      if(user && user.roles && roles.includes(user.roles)) {
+      if(user && user.roles) {
         return true;
       }
       if(user) {
