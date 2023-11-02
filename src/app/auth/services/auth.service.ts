@@ -24,7 +24,7 @@ export interface UserResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  url = 'http://localhost:3000/';
+  url = 'http://localhost:3000/api/v1/';
   AuthenticatedUser$ = new BehaviorSubject<User | null>(null);
 
   constructor(

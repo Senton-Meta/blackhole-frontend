@@ -1,0 +1,35 @@
+.header {
+  width: 100%;
+  height: 64px;
+  background-color: rgba(255, 255, 255, 0.05);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__side {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo-text {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.header__user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-03);
+}
+
+.header__avatar {
+  width: 40px;
+  height: 40px;
+  //background-color: var(--on-surface);
+  border-radius: 50%;
+
+  &.unknown img {
+    object-fit: contain;
+  }
+}

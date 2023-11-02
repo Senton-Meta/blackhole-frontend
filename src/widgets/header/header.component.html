@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="header__side">
+    <div class="header__logo">
+      <a routerLink="/">
+        <span class="header__logo-text">blackhole</span>
+      </a>
+    </div>
+  </div>
+  <div class="header__side">
+    <div *ngIf="(AuthenticatedUser$ | async); then thenBlock else elseBlock">
+
+    </div>
+    <ng-template #thenBlock>
+      <div class="header__user-info">
+        <span class="header__username">{{AuthenticatedUser$.getValue()?.email}}</span>
+        <div class="header__avatar unknown">
+          <img src="assets/icons/unknown-user.svg">
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #elseBlock>
+      <div class="header__user-info">
+        <div class="header__avatar unknown">
+          <img src="assets/icons/unknown-user.svg">
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</header>
