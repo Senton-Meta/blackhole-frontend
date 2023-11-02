@@ -2,6 +2,7 @@ import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
 import {AuthService} from "../services/auth.service";
 import {map, take} from "rxjs";
+import {StorageService} from "../../_services/storage.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
 
@@ -12,14 +13,15 @@ export const authGuard: CanActivateFn = (route, state) => {
     take(1), // take the first one and then unsubscribe automatically
     map(user => {
       // check if route is restricted by role
-      const { roles } = route.data;
+
+      console.log(user)
       if(user && user.roles) {
         return true;
       }
       if(user) {
         return  router.createUrlTree(['/forbidden']);
       }
-      return  router.createUrlTree(['/login']);
+      return  router.createUrlTree(['/sign-in']);
     })
   )
 };

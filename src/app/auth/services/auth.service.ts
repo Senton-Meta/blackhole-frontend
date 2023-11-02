@@ -71,6 +71,8 @@ export class AuthService {
   }
 
   autoLogin() {
+    console.log('Auto login')
+
     const userData = this.storageService.getSavedUser();
     if (!userData) {
       return;

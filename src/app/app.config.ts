@@ -1,10 +1,22 @@
-import {ApplicationConfig, importProvidersFrom} from '@angular/core';
+import {APP_INITIALIZER, ApplicationConfig, importProvidersFrom} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {HttpRequestInterceptor} from "./interceptors/http-request.interceptor";
 import {JwtModule} from "@auth0/angular-jwt";
+import {AuthService} from "./auth/services/auth.service";
+
+export function initialize(
+  authService: AuthService,
+) {
+
+  return async () => {
+    authService.autoLogin();
+    console.log('app initialized');
+  };
+}
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +25,12 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpRequestInterceptor,
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initialize,
+      deps: [AuthService],
       multi: true
     },
     importProvidersFrom(
