@@ -13,9 +13,11 @@
     <ng-template #thenBlock>
       <div class="header__user-info">
         <span class="header__username">{{AuthenticatedUser$.getValue()?.email}}</span>
-        <div class="header__avatar unknown">
-          <img src="assets/icons/unknown-user.svg">
-        </div>
+        <a routerLink="/profile">
+          <div class="header__avatar unknown">
+            <img src="assets/icons/unknown-user.svg">
+          </div>
+        </a>
       </div>
     </ng-template>
     <ng-template #elseBlock>
