@@ -22,6 +22,9 @@ export class SystemObjectsLocationService {
   constructor() { }
 
   getSystemWithCoordinates(systemRoot: SystemObject): SystemObjectWithCoordinates {
+    let systemRootWithCoordinates: SystemObjectWithCoordinates = systemRoot as SystemObjectWithCoordinates;
+    systemRootWithCoordinates.coordinates = { x: 0, y: 0 };
 
+    return systemRootWithCoordinates;
   }
 }
