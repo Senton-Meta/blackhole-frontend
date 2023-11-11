@@ -36,36 +36,26 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http.request<AuthResponseData>('post', this.url + 'authentication/sign-in',
-      {
-        body: {email, password},
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true
-      })
+    const body = { email, password };
+
+    return this.http.post(this.url + 'authentication/sign-in', body, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
+    })
       .pipe(
         catchError(err => {
           console.log(err);
           let errorMessage = 'An unknown error occurred!';
           if (err.error.message === 'Bad credentials') {
-            errorMessage = 'The email address or password you entered is invalid'
+            errorMessage = 'The email address or password you entered is invalid';
           }
-          return throwError(() => new Error(errorMessage))
+          return throwError(() => new Error(errorMessage));
         }),
-        tap((user) => {
-          const token = user.accessToken;
-          if (token) {
-            const decodedToken = this.jwtHelper.decodeToken(token);
-            console.log(decodedToken);
-            const extractedUser: UserResponseData = {
-              email: decodedToken.email,
-              id: decodedToken.sub,
-              roles: decodedToken.roles
-            };
-            this.storageService.saveUser(extractedUser);
-            this.AuthenticatedUser$.next(extractedUser);
-          }
+        tap(response => {
+          this.AuthenticatedUser$.next(response as User);
+          console.log('auth good', response);
         })
       );
   }
@@ -81,13 +71,13 @@ export class AuthService {
   }
 
   logout() {
-    this.http.request('post', this.url + 'authentication/logout', {
+    this.http.request('get', this.url + 'authentication/signout', {
       withCredentials: true
     }).subscribe({
       next: () => {
         this.storageService.clean();
         this.AuthenticatedUser$.next(null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/sign-in']);
       }
     })
 
@@ -98,6 +88,4 @@ export class AuthService {
       withCredentials: true
     })
   }
-
-
 }

@@ -12,12 +12,13 @@
     </div>
     <ng-template #thenBlock>
       <div class="header__user-info">
-        <span class="header__username">{{AuthenticatedUser$.getValue()?.email}}</span>
+        <span class="header__username">{{AuthenticatedUser$.getValue()?.username}}</span>
         <a routerLink="/profile">
           <div class="header__avatar unknown">
             <img src="assets/icons/unknown-user.svg">
           </div>
         </a>
+        <button (click)="signOut()">Выйти</button>
       </div>
     </ng-template>
     <ng-template #elseBlock>
@@ -25,6 +26,7 @@
         <div class="header__avatar unknown">
           <img src="assets/icons/unknown-user.svg">
         </div>
+        <button (click)="signOut()">Выйти</button>
       </div>
     </ng-template>
   </div>
