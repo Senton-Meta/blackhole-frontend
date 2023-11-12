@@ -1,3 +1,6 @@
 <section>
-  <h1>User profile!</h1>
+  <h1>Профиль пользователя</h1>
+  <p>Имя пользователя: {{ AuthenticatedUser$.value?.username }}</p>
+  <p>Электронная почта: {{ AuthenticatedUser$.value?.email }}</p>
+  <p>Роли: <span *ngFor="let role of AuthenticatedUser$.value?.roles">{{role.name}}</span></p>
 </section>

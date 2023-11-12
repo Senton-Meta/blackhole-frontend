@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {AuthService} from "../../app/auth/services/auth.service";
+import {BehaviorSubject} from "rxjs";
+import {User} from "../../entities/user";
 
 @Component({
   selector: 'app-profile-page',
@@ -9,6 +12,15 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./profile-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfilePageComponent {
+export class ProfilePageComponent implements OnInit {
+  AuthenticatedUser$ = new BehaviorSubject<User | null>(null);
 
+  constructor(
+    private readonly authService: AuthService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.AuthenticatedUser$.next(this.authService.AuthenticatedUser$.value)
+  }
 }
