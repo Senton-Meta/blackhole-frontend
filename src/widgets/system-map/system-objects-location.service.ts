@@ -7,7 +7,7 @@ export type SystemCoordinates = {
 
 export interface SystemObject {
   name: string;
-  nodes: SystemObject[];
+  nodes?: SystemObject[];
 }
 
 export interface SystemObjectWithCoordinates extends SystemObject {
