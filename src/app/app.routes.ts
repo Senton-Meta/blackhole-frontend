@@ -5,6 +5,7 @@ import {SignInPageComponent} from 'src/pages/auth/sign-in-page/sign-in-page.comp
 import {authGuard} from "./auth/guards/auth.guard";
 import {AdminComponent} from "../pages/admin/admin.component";
 import {ProfilePageComponent} from "../pages/profile-page/profile-page.component";
+import {SandboxPageComponent} from "../pages/sandbox-page/sandbox-page.component";
 
 export const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -14,6 +15,8 @@ export const routes: Routes = [
 
   { path: 'profile', component: ProfilePageComponent, canMatch: [authGuard]},
   { path: 'admin', component: AdminComponent, canMatch: [authGuard]},
+
+  { path: 'sandbox', component: SandboxPageComponent, canMatch: [authGuard] },
 
   {path: '**', title: 'Страница не найдена!', component: NotFoundPageComponent}
 ];
