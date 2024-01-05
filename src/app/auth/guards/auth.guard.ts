@@ -5,7 +5,7 @@ import {map, take} from "rxjs";
 import {StorageService} from "../../_services/storage.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
-
+  console.log('--------------- AUTH GUARD')
   const router = inject(Router);
   const authService = inject(AuthService);
 
@@ -14,7 +14,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     map(user => {
       // check if route is restricted by role
 
-      console.log(user)
       if(user && user.roles) {
         return true;
       }

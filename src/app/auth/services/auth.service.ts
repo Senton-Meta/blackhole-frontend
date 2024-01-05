@@ -42,7 +42,7 @@ export class AuthService {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: true
+      withCredentials: true,
     })
       .pipe(
         catchError(err => {
@@ -53,21 +53,24 @@ export class AuthService {
           }
           return throwError(() => new Error(errorMessage));
         }),
-        tap(response => {
-          this.AuthenticatedUser$.next(response as User);
-          console.log('auth good', response);
+        tap((response: any) => {
+
+          this.AuthenticatedUser$.next(response.userData as User);
+          this.storageService.saveRefreshToken(response.refreshToken);
         })
       );
   }
 
   autoLogin() {
-    console.log('Auto login')
+    console.log('--------------- AUTO LOGIN')
 
-    const userData = this.storageService.getSavedUser();
-    if (!userData) {
+    const refreshToken = this.storageService.getRefreshToken();
+    if (!refreshToken) {
       return;
     }
-    this.AuthenticatedUser$.next(userData);
+
+    this.refreshToken()
+    // this.AuthenticatedUser$.next(userData);
   }
 
   logout() {
