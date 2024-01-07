@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, catchError, Observable, shareReplay, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, first, Observable, shareReplay, tap, throwError} from "rxjs";
 import {User} from "../../../entities/user";
 import {Router} from "@angular/router";
 import {StorageService} from "../../_services/storage.service";
@@ -69,7 +69,11 @@ export class AuthService {
       return;
     }
 
-    this.refreshToken()
+    this.refreshToken().pipe(
+      tap(() => {
+
+      })
+    )
     // this.AuthenticatedUser$.next(userData);
   }
 
