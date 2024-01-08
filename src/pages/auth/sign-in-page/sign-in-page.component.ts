@@ -31,13 +31,12 @@ export class SignInPageComponent implements OnInit {
 
   signIn() {
     const val = this.form.value;
-    console.log(val.email, val.password)
 
     if (val.email && val.password) {
       this.authService.login(val.email, val.password)
         .subscribe(
           () => {
-            console.log("User is logged in");
+            console.log("[sign-in-page.component.ts]: user is logged in");
             this.router.navigateByUrl('/');
           }
         );

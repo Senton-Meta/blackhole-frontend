@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, ApplicationConfig, importProvidersFrom} from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {provideRouter, Router} from '@angular/router';
 
 import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
@@ -12,8 +12,10 @@ export function initialize(
 ) {
 
   return async () => {
-    authService.autoLogin();
-    console.log('app initialized');
+    authService.autoLogin().subscribe(v => {
+      console.log('[app.config.ts]: auto login successfully')
+    });
+    console.log('[app.config.ts]: app initialized');
   };
 }
 

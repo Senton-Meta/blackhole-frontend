@@ -5,7 +5,7 @@ import {map, take} from "rxjs";
 import {StorageService} from "../../_services/storage.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
-  console.log('--------------- AUTH GUARD')
+  console.log('[auth.guard.ts]: canActivate')
   const router = inject(Router);
   const authService = inject(AuthService);
 

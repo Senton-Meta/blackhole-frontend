@@ -36,44 +36,57 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const body = { email, password };
+    const body = {email, password};
 
     return this.http.post(this.url + 'authentication/sign-in', body, {
       headers: {
         'Content-Type': 'application/json',
       },
       withCredentials: true,
-    })
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          let errorMessage = 'An unknown error occurred!';
-          if (err.error.message === 'Bad credentials') {
-            errorMessage = 'The email address or password you entered is invalid';
-          }
-          return throwError(() => new Error(errorMessage));
-        }),
-        tap((response: any) => {
+    }).pipe(
+      catchError(err => {
+        console.log(err);
+        let errorMessage = 'An unknown error occurred!';
+        if (err.error.message === 'Bad credentials') {
+          errorMessage = 'The email address or password you entered is invalid';
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+      tap((response: any) => {
 
-          this.AuthenticatedUser$.next(response.userData as User);
-          this.storageService.saveRefreshToken(response.refreshToken);
-        })
-      );
+        this.AuthenticatedUser$.next(response.userData as User);
+        this.storageService.saveRefreshToken(response.refreshToken);
+      })
+    );
   }
 
   autoLogin() {
-    console.log('--------------- AUTO LOGIN')
-
-    const refreshToken = this.storageService.getRefreshToken();
-    if (!refreshToken) {
-      return;
-    }
-
-    this.refreshToken().pipe(
-      tap(() => {
-
+    return this.http.post(this.url + 'authentication/autologin', {}, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    }).pipe(
+      catchError(err => {
+        console.log(err);
+        let errorMessage = 'An unknown error occurred!';
+        if (err.error.message === 'Bad credentials') {
+          errorMessage = 'The email address or password you entered is invalid';
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+      tap((response: any) => {
+        console.log('[auth.service.ts]: auto login successfully');
+        this.AuthenticatedUser$.next(response.userData as User);
+        this.router.navigateByUrl('/');
       })
-    )
+    );
+
+    // const refreshToken = this.storageService.getRefreshToken();
+    // if (!refreshToken) {
+    //   return;
+    // }
+
     // this.AuthenticatedUser$.next(userData);
   }
 
